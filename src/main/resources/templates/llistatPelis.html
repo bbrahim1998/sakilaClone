@@ -1,0 +1,31 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Pel·licules</title>
+    <link rel="stylesheet" th:href="@{/css/estils.css}">
+</head>
+<body>
+  <h1>Pel·lícules</h1>
+
+  <div th:if="${error}">
+    <h3 style="color:red">Error: <span th:text="${error}"></span></h3>
+  </div>
+   <p><a th:href="@{/}">Tornar</a></p>	
+  <table th:if="${pelis}" class="styled-table">
+    <thead>
+      <tr><th>ID</th><th>Títol</th><th>Descripció</th><th>Any Llançament</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="p : ${pelis}">
+        <td th:text="${p.id()}"></td>
+        <td th:text="${p.titol()}"></td>
+        <td th:text="${p.descripcio()}"></td>
+        <td th:text="${p.anyLlancament()}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+ 
+</body>
+</html>

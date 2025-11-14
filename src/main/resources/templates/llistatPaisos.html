@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Actors</title>
+    <link rel="stylesheet" th:href="@{/css/estils.css}">
+</head>
+<body>
+  <h1>Països</h1>
+
+  <div th:if="${error}">
+    <h3 style="color:red">Error: <span th:text="${error}"></span></h3>
+  </div>
+   <p><a th:href="@{/}">Tornar</a></p>	
+  <table th:if="${paisos}" class="styled-table">
+    <thead>
+      <tr><th>ID</th><th>Nom</th><th>LastUpdate</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="p : ${paisos}">
+        <td th:text="${p.id()}"></td>
+        <td th:text="${p.nom()}"></td>
+        <td th:text="${p.lastUpdate()}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+ 
+</body>
+</html>
