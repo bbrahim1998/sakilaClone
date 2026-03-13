@@ -27,6 +27,7 @@ public class CinemaController {
 	public String jndi(Model model) {
 		try {
 			model.addAttribute("actors", cinemaService.llistaActors());
+			log.info("Commit jenkins");
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("error", e.getClass().getSimpleName() + ": " + e.getMessage());
