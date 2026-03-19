@@ -1,0 +1,47 @@
+services:
+
+  apache:
+    build: ./imatge-apache
+    container_name: apache
+    ports:
+      - "80:80"
+    depends_on:
+      - tomcat1
+      - tomcat2
+    networks:
+      - my-network
+  
+  tomcat1:
+    image: sakilaApp:${VERSION}
+    container_name: tomcat1
+    environment:
+      - CATALINA_OPTS=-DjvmRoute=tomcat1
+    depends_on:
+      - mysql-sakila
+    networks:
+      - my-network
+
+  tomcat2:
+    image: sakilaApp:${VERSION}
+    container_name: tomcat2
+    environment:
+      - CATALINA_OPTS=-DjvmRoute=tomcat2
+    depends_on:
+      - mysql-sakila
+    networks:
+      - my-network
+  
+  mysql-sakila:
+    build: ./mysql-sakila
+    container_name: mysql-sakila
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+    
+volumes:
+  mysql_data:
