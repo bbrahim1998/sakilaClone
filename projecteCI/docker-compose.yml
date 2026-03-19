@@ -12,7 +12,7 @@ services:
       - my-network
   
   tomcat1:
-    image: sakilaApp:${VERSION}
+    image: sakila-app:${VERSION}
     container_name: tomcat1
     environment:
       - CATALINA_OPTS=-DjvmRoute=tomcat1
@@ -22,7 +22,7 @@ services:
       - my-network
 
   tomcat2:
-    image: sakilaApp:${VERSION}
+    image: sakila-app:${VERSION}
     container_name: tomcat2
     environment:
       - CATALINA_OPTS=-DjvmRoute=tomcat2
