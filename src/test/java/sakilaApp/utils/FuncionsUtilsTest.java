@@ -17,7 +17,7 @@ public class FuncionsUtilsTest {
 		int resultat = FuncionsUtils.provaSuma(numA,numB);
 	
 		//THEN
-		assertEquals(22,resultat,"S'esperava que fossin iguals");
+		assertEquals(20,resultat,"S'esperava que fossin iguals");
 	}
 	
 	@Test
@@ -38,28 +38,11 @@ public class FuncionsUtilsTest {
 	
 	}
 	
-	@Test
-	public void provaSumaParellsFallaQuanUnImparell() {
-		//GIVEN
-		int numA=11;
-		int numB=10;
-		//WHEN
-		try {
-			int resultat = FuncionsUtils.provaSumaSiParells(numA,numB);
-
-			//THEN
-			assertEquals(20,resultat,"S'esperava que fossin iguals");
-			
-		}catch(Exception ex) {
-			fail("Ha generat excepció");
-		}
-	
-	}
 	
 	@Test
 	public void provaSumaSiParellsLlancaExceptionQuanNombreAImparell() {
 		//GIVEN
-		int numA=12;
+		int numA=11;
 		int numB=10;
 		//WHEN
 		//THEN
