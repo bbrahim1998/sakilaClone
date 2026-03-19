@@ -26,7 +26,7 @@ public class JdbcRepository {
 	@Autowired
 	private DataSource dataSource;
 	
-	public List<Actor> llistaActors() {
+	public List<Actor> llistaActors() throws Exception {
         List<Actor> llistat = new ArrayList<>();
 	
         try (Connection conn = dataSource.getConnection();
@@ -39,13 +39,15 @@ public class JdbcRepository {
             }
         } catch (SQLException e) {
         	log.error("Error recuperant actors: " + e.getStackTrace().toString());
+        	
+        	throw new Exception(e);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
         return llistat;
     }
 	
-	public List<Pais> llistaPaisos() {
+	public List<Pais> llistaPaisos() throws Exception {
         List<Pais> llistat = new ArrayList<>();
 	
         try (Connection conn = dataSource.getConnection();
@@ -60,10 +62,11 @@ public class JdbcRepository {
         	log.error("Error recuperant paisos: " + e.getStackTrace().toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new Exception(e);
 		}
         return llistat;
     }
-	public List<Pelicula> llistaPelis() {
+	public List<Pelicula> llistaPelis() throws Exception {
         List<Pelicula> llistat = new ArrayList<>();
 	
         try (Connection conn = dataSource.getConnection();
@@ -78,7 +81,30 @@ public class JdbcRepository {
         	log.error("Error recuperant pelis: " + e.getStackTrace().toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new Exception(e);
 		}
         return llistat;
+    }
+	
+	public Actor getActorByName(Actor a) throws Exception {
+        
+        try ( Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT * from Actor where first_name = ? and last_name=?");
+        	 ) {
+	        ps.setString(1, a.nom().toUpperCase());
+	       	ps.setString(2, a.cognoms().toUpperCase());
+	        ResultSet rs = ps.executeQuery();
+	        
+            while (rs.next()) {
+            	Actor aTrobat = new Actor(rs.getInt("actor_id"),rs.getString("first_name"),rs.getString("second_name"),rs.getTimestamp("last_update").toLocalDateTime());
+            	return aTrobat;
+            }
+        } catch (SQLException e) {
+        	log.error("Error recuperant pelis: " + e.getStackTrace().toString());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+        return null;
     }
 }

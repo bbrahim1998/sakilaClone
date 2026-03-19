@@ -21,7 +21,7 @@ public class CinemaService {
 	@Autowired
 	private JdbcRepository jdbcRepo;
 	
-    public List<Actor> llistaActors() {
+    public List<Actor> llistaActors() throws Exception {
     	log.info("Petició recuperació Actors rebuda" );
     	List<Actor> actors = new ArrayList<Actor>();
     	
@@ -33,7 +33,7 @@ public class CinemaService {
         
     }
     
-    public List<Pais> llistaPaisos() {
+    public List<Pais> llistaPaisos() throws Exception {
     	log.info("Petició recuperació Pais rebuda.");
     	List<Pais> paisos = new ArrayList<Pais>();
     	paisos = jdbcRepo.llistaPaisos();
@@ -42,7 +42,7 @@ public class CinemaService {
     	
         
     }
-    public List<Pelicula> llistaPelis() {
+    public List<Pelicula> llistaPelis() throws Exception {
     	log.info("Petició recuperació Pelicules rebuda.");
     	List<Pelicula> pelis = new ArrayList<Pelicula>();
     	pelis = jdbcRepo.llistaPelis();
@@ -51,4 +51,18 @@ public class CinemaService {
     	
         
     }
+    
+    public boolean addActor(Actor a) throws Exception {
+    	log.info("S'ha rebut petició afegir actor:" + a);
+    	//Miro si hi ha l'actor amb el mateix nom
+    	
+    	//Si ja hi és retorno false,
+    	//Si no, l'afegeixo
+    	//SI hi ha algun error llanço excepció.
+    	jdbcRepo.getActorByName(a);
+    	return true;
+    	
+    	
+    }
+    
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import sakilaApp.services.CinemaService;
 
@@ -24,36 +25,34 @@ public class CinemaController {
 	}
 
 	@GetMapping("/actors")
-	public String jndi(Model model) {
-		try {
+	public String actors(Model model) throws Exception {
 			model.addAttribute("actors", cinemaService.llistaActors());
-			log.info("Commit jenkins");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("error", e.getClass().getSimpleName() + ": " + e.getMessage());
-		}
+		return "llistat";
+	}
+	/**
+	 * Pendent d'acabar
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/newActor")
+	public String newActor(Model model) throws Exception {
+			model.addAttribute("actors", cinemaService.llistaActors());
 		return "llistat";
 	}
 	
 	@GetMapping("/paisos")
-	public String paisos(Model model) {
-		try {
+	public String paisos(Model model) throws Exception {
 			model.addAttribute("paisos", cinemaService.llistaPaisos());
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("error", e.getClass().getSimpleName() + ": " + e.getMessage());
-		}
 		return "llistatPaisos";
 	}
 	
 	@GetMapping("/pelis")
-	public String pelis(Model model) {
-		try {
+	public String pelis(Model model) throws Exception {
+
 			model.addAttribute("pelis", cinemaService.llistaPelis());
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("error", e.getClass().getSimpleName() + ": " + e.getMessage());
-		}
+
 		return "llistatPelis";
 	}
+	
 }
