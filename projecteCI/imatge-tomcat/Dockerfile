@@ -8,4 +8,4 @@ COPY config/* /usr/local/tomcat/conf/
 COPY lib/* /usr/local/tomcat/lib/
 
 # Aplicació
-COPY ../target/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY ../../target/*.war /usr/local/tomcat/webapps/ROOT.war
