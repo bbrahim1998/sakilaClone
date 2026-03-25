@@ -1,5 +1,6 @@
 package sakilaApp.services;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,12 @@ public class CinemaService {
 	
 	private static final Logger log = LogManager.getLogger(CinemaService.class);
 	
-	@Autowired
-	private JdbcRepository jdbcRepo;
+	
+	private final JdbcRepository jdbcRepo;
+	
+	public CinemaService(JdbcRepository jdbcRepository) {
+		this.jdbcRepo=jdbcRepository;
+	}
 	
     public List<Actor> llistaActors() throws Exception {
     	log.info("Petició recuperació Actors rebuda" );
@@ -52,17 +57,23 @@ public class CinemaService {
         
     }
     
-    public boolean addActor(Actor a) throws Exception {
-    	log.info("S'ha rebut petició afegir actor:" + a);
-    	//Miro si hi ha l'actor amb el mateix nom
-    	
-    	//Si ja hi és retorno false,
-    	//Si no, l'afegeixo
-    	//SI hi ha algun error llanço excepció.
-    	jdbcRepo.getActorByName(a);
-    	return true;
-    	
-    	
+    public void registrarActor(String nom, String cognom) throws Exception {
+        if (nom == null || nom.isBlank() || cognom == null || cognom.isBlank()) {
+            throw new RuntimeException("El nom i el cognom són obligatoris.");
+        }
+
+        String nomUpper = nom.toUpperCase().trim();
+        String cognomUpper = cognom.toUpperCase().trim();
+
+        try {
+            if (jdbcRepo.existeixActor(nomUpper, cognomUpper)) {
+                throw new RuntimeException("L'actor " + nomUpper + " " + cognomUpper + " ja existeix.");
+            }
+            jdbcRepo.insertarActor(nomUpper, cognomUpper);
+        } catch (SQLException e) {
+            log.error("Error JDBC: {}", e.getMessage());
+            throw new Exception("Error en l'operació de base de dades", e);
+        }
     }
     
 }

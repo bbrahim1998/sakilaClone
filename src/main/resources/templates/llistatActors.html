@@ -1,0 +1,46 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Actors</title>
+    <link rel="stylesheet" th:href="@{/css/estils.css}">
+</head>
+<body>
+  <h1>Actors</h1>
+
+  <div th:if="${error}">
+    <h3 style="color:red">Error: <span th:text="${error}"></span></h3>
+  </div>
+  <div th:if="${missatge}">
+    <h3 style="color:green" th:text="${missatge}"></h3>
+  </div>
+   <p><a th:href="@{/}">Tornar</a></p>
+   <div class="form-container" style="margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 5px;">
+    <h3>Afegir nou Actor</h3>
+    <form th:action="@{/actors/add}" method="post" style="display: flex; gap: 10px; align-items: center;">
+      <label for="nom">Nom:</label>
+      <input type="text" id="nom" name="first_name" required placeholder="Ex: Brad">
+      
+      <label for="cognoms">Cognoms:</label>
+      <input type="text" id="cognoms" name="last_name" required placeholder="Ex: Pitt">
+      
+      <button type="submit" class="btn-add">Afegir Actor</button>
+    </form>
+  </div>
+  <table th:if="${actors}" class="styled-table">
+    <thead>
+      <tr><th>ID</th><th>Nom</th><th>Cognoms</th><th>LastUpdate</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="p : ${actors}">
+        <td th:text="${p.id()}"></td>
+        <td th:text="${p.nom()}"></td>
+        <td th:text="${p.cognoms()}"></td>
+        <td th:text="${p.lastUpdate()}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+ 
+</body>
+</html>

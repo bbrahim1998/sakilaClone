@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sakilaApp.services.CinemaService;
 
@@ -15,8 +17,11 @@ public class CinemaController {
 
 	private static final Logger log = LogManager.getLogger(CinemaController.class);
 	
-	@Autowired
-	private CinemaService cinemaService;	
+	private final CinemaService cinemaService;
+	
+	public CinemaController(CinemaService cinemaService) {
+		this.cinemaService = cinemaService;
+	}
 
 	@GetMapping("/")
 	public String index() {
@@ -27,18 +32,24 @@ public class CinemaController {
 	@GetMapping("/actors")
 	public String actors(Model model) throws Exception {
 			model.addAttribute("actors", cinemaService.llistaActors());
-		return "llistat";
+		return "llistatActors";
 	}
-	/**
-	 * Pendent d'acabar
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@PostMapping("/newActor")
-	public String newActor(Model model) throws Exception {
-			model.addAttribute("actors", cinemaService.llistaActors());
-		return "llistat";
+	
+	@PostMapping("/actors/add")
+	public String addActor(@RequestParam("first_name") String firstName, 
+	                       @RequestParam("last_name") String lastName, 
+	                       RedirectAttributes redirectAttributes) {
+	    try {
+	    	cinemaService.registrarActor(firstName, lastName);
+	        
+	        redirectAttributes.addFlashAttribute("missatge", "Actor afegit amb èxit!");
+	    } catch (Exception e) {
+	    	log.error("Error intentant afegir l'actor {} {}: {}",firstName,lastName,e.getMessage());
+	        redirectAttributes.addFlashAttribute("error", "No s'ha pogut guardar l'actor.");
+	    }
+	    
+	    // Redirigim a la llista d'actors per veure el nou element
+	    return "redirect:/actors"; 
 	}
 	
 	@GetMapping("/paisos")

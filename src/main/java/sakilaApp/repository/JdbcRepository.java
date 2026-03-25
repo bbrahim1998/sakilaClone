@@ -23,8 +23,11 @@ public class JdbcRepository {
 	
 	private static final Logger log = LogManager.getLogger(JdbcRepository.class);
 	
-	@Autowired
-	private DataSource dataSource;
+	private final DataSource dataSource;
+	
+	public JdbcRepository(DataSource dataSource) {
+		this.dataSource=dataSource;
+	}
 	
 	public List<Actor> llistaActors() throws Exception {
         List<Actor> llistat = new ArrayList<>();
@@ -85,26 +88,34 @@ public class JdbcRepository {
 		}
         return llistat;
     }
-	
-	public Actor getActorByName(Actor a) throws Exception {
+
+    public boolean existeixActor(String nom, String cognom) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM actor WHERE first_name = ? AND last_name = ?";
         
-        try ( Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * from Actor where first_name = ? and last_name=?");
-        	 ) {
-	        ps.setString(1, a.nom().toUpperCase());
-	       	ps.setString(2, a.cognoms().toUpperCase());
-	        ResultSet rs = ps.executeQuery();
-	        
-            while (rs.next()) {
-            	Actor aTrobat = new Actor(rs.getInt("actor_id"),rs.getString("first_name"),rs.getString("second_name"),rs.getTimestamp("last_update").toLocalDateTime());
-            	return aTrobat;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, nom);
+            ps.setString(2, cognom);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
-        } catch (SQLException e) {
-        	log.error("Error recuperant pelis: " + e.getStackTrace().toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new Exception(e);
-		}
-        return null;
+        }
+        return false;
+    }
+
+    public void insertarActor(String nom, String cognom) throws SQLException {
+        String sql = "INSERT INTO actor (first_name, last_name, last_update) VALUES (?, ?, NOW())";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, nom);
+            ps.setString(2, cognom);
+            ps.executeUpdate();
+        }
     }
 }
