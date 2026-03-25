@@ -45,7 +45,7 @@ public class CinemaController {
 	        redirectAttributes.addFlashAttribute("missatge", "Actor afegit amb èxit!");
 	    } catch (Exception e) {
 	    	log.error("Error intentant afegir l'actor {} {}: {}",firstName,lastName,e.getMessage());
-	        redirectAttributes.addFlashAttribute("error", "No s'ha pogut guardar l'actor.");
+	        redirectAttributes.addFlashAttribute("error", e.getMessage());
 	    }
 	    
 	    // Redirigim a la llista d'actors per veure el nou element
