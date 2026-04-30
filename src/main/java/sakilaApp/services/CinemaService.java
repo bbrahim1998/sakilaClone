@@ -75,5 +75,23 @@ public class CinemaService {
             throw new Exception("Error en l'operació de base de dades", e);
         }
     }
+
+    public void registrarPais(String nomPais) throws Exception {
+        if (nomPais == null || nomPais.isBlank()) {
+            throw new RuntimeException("El nom del país és obligatori.");
+        }
+
+        String nomUpper = nomPais.toUpperCase().trim();
+
+        try {
+            if (jdbcRepo.existeixPais(nomUpper)) {
+                throw new RuntimeException("El país " + nomUpper + " ja existeix.");
+            }
+            jdbcRepo.insertarPais(nomUpper);
+        } catch (SQLException e) {
+            log.error("Error JDBC: {}", e.getMessage());
+            throw new Exception("Error en l'operació de base de dades", e);
+        }
+    }
     
 }

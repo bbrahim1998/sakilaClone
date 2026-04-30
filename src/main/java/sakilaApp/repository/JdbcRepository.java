@@ -118,4 +118,32 @@ public class JdbcRepository {
             ps.executeUpdate();
         }
     }
+
+    public boolean existeixPais(String nom) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM country WHERE country = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, nom);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void insertarPais(String nom) throws SQLException {
+        String sql = "INSERT INTO country (country, last_update) VALUES (?, NOW())";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, nom);
+            ps.executeUpdate();
+        }
+    }
 }
