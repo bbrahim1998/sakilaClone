@@ -35,7 +35,7 @@ public class CinemaController {
 		return "llistatActors";
 	}
 	
-	@PostMapping("/actors/ad")
+	@PostMapping("/actors/add")
 	public String addActor(@RequestParam("first_name") String firstName, 
 	                       @RequestParam("last_name") String lastName, 
 	                       RedirectAttributes redirectAttributes) {
@@ -56,6 +56,21 @@ public class CinemaController {
 	public String paisos(Model model) throws Exception {
 			model.addAttribute("paisos", cinemaService.llistaPaisos());
 		return "llistatPaisos";
+	}
+	
+	@PostMapping("/paisos/add")
+	public String addPais(@RequestParam("country_name") String countryName, 
+	                       RedirectAttributes redirectAttributes) {
+	    try {
+	    	cinemaService.registrarPais(countryName);
+	        
+	        redirectAttributes.addFlashAttribute("missatge", "País afegit amb èxit!");
+	    } catch (Exception e) {
+	    	log.error("Error intentant afegir el país {}: {}", countryName, e.getMessage());
+	        redirectAttributes.addFlashAttribute("error", e.getMessage());
+	    }
+	    
+	    return "redirect:/paisos";
 	}
 	
 	@GetMapping("/pelis")
