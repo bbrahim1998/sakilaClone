@@ -35,7 +35,7 @@ public class CinemaController {
 		return "llistatActors";
 	}
 	
-	@PostMapping("/actors/add")
+	@PostMapping("/actors/ad")
 	public String addActor(@RequestParam("first_name") String firstName, 
 	                       @RequestParam("last_name") String lastName, 
 	                       RedirectAttributes redirectAttributes) {
