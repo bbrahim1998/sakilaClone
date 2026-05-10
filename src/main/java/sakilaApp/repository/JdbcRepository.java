@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import sakilaApp.model.dao.Actor;
@@ -20,7 +19,7 @@ import sakilaApp.model.dao.Pelicula;
 
 @Repository
 public class JdbcRepository {
-	
+
 	private static final Logger log = LogManager.getLogger(JdbcRepository.class);
 	
 	private final DataSource dataSource;
