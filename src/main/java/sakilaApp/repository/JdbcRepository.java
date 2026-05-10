@@ -41,11 +41,8 @@ public class JdbcRepository {
                 llistat.add(p);
             }
         } catch (SQLException e) {
-        	log.error("Error recuperant actors: " + e.getStackTrace().toString());
-        	
+        	log.error("Error recuperant actors: ", e);
         	throw new Exception(e);
-			// TODO Auto-generated catch block
-			
 		}
         return llistat;
     }
@@ -62,9 +59,7 @@ public class JdbcRepository {
                 llistat.add(p);
             }
         } catch (SQLException e) {
-        	log.error("Error recuperant paisos: " + e.getStackTrace().toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	log.error("Error recuperant paisos: ", e);
 			throw new Exception(e);
 		}
         return llistat;
@@ -81,9 +76,7 @@ public class JdbcRepository {
                 llistat.add(p);
             }
         } catch (SQLException e) {
-        	log.error("Error recuperant pelis: " + e.getStackTrace().toString());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	log.error("Error recuperant pelis: ", e);
 			throw new Exception(e);
 		}
         return llistat;
