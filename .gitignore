@@ -1,4 +1,7 @@
 classes
 default-compile
 target/*
-.settings
+.settingsjenkins_github*
+*.swp
+jenkins_github*
+*.pub
