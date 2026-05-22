@@ -1,5 +1,5 @@
+version: '3.8'
 services:
-
   tomcat1:
     image: sakila-app:${VERSION}
     container_name: tomcat1
@@ -52,6 +52,7 @@ services:
         condition: service_healthy
     networks:
       - my-network
+
 networks:
   my-network:
     driver: bridge
