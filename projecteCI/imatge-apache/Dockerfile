@@ -1,5 +1,8 @@
 FROM httpd:2.4
 
+# Comentem qualsevol directiva CustomLog que vingui al fitxer per defecte
+RUN sed -i 's/^CustomLog/#CustomLog/' /usr/local/apache2/conf/httpd.conf
+
 RUN rm -rf /usr/local/apache2/htdocs/*
 # Copiar configuració personalitzada
 COPY balancer.conf /usr/local/apache2/conf/extra/balancer.conf

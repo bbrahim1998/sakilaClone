@@ -1,8 +1,80 @@
-FROM mysql:8.0
+services:
 
-ENV MYSQL_ROOT_PASSWORD=1234
-ENV MYSQL_DATABASE=sakila
-ENV MYSQL_USER=userSakila
-ENV MYSQL_PASSWORD=User1234
+  tomcat1:
+    image: sakila-app:${VERSION}
+    container_name: tomcat1
+    environment:
+      - CATALINA_OPTS=-DjvmRoute=tomcat1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      - mysql-sakila
+    networks:
+      - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=tomcat1"
 
-COPY initdb/InitSakila.sql /docker-entrypoint-initdb.d/
+  tomcat2:
+    image: sakila-app:${VERSION}
+    container_name: tomcat2
+    environment:
+      - CATALINA_OPTS=-DjvmRoute=tomcat2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      - mysql-sakila
+    networks:
+      - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=tomcat2"
+    
+  mysql-sakila:
+    build: ./mysql-sakila
+    container_name: mysql-sakila
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=mysql"
+
+  apache:
+    build: ./imatge-apache
+    container_name: apache
+    ports:
+      - "80:80"
+    depends_on:
+      tomcat1:
+        condition: service_healthy
+      tomcat2:
+        condition: service_healthy
+    networks:
+      - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=apache"
+networks:
+  my-network:
+    driver: bridge
+    
+volumes:
+  mysql_data:
