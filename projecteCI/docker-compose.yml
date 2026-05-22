@@ -1,5 +1,5 @@
-version: '3.8'
 services:
+
   tomcat1:
     image: sakila-app:${VERSION}
     container_name: tomcat1
@@ -15,6 +15,11 @@ services:
       - mysql-sakila
     networks:
       - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=tomcat1"
 
   tomcat2:
     image: sakila-app:${VERSION}
@@ -31,6 +36,11 @@ services:
       - mysql-sakila
     networks:
       - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=tomcat2"
     
   mysql-sakila:
     build: ./mysql-sakila
@@ -39,6 +49,11 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - my-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=mysql"
 
   apache:
     build: ./imatge-apache
@@ -52,7 +67,12 @@ services:
         condition: service_healthy
     networks:
       - my-network
-
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "container_name=apache"
+        
 networks:
   my-network:
     driver: bridge
